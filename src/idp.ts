@@ -2,7 +2,7 @@ import {
   CfnUserPoolIdentityProvider,
   CfnUserPoolIdentityProviderProps,
 } from "aws-cdk-lib/aws-cognito";
-import { Construct } from "aws-cdk-lib/core";
+import { Construct } from "constructs";
 
 export class Idp extends CfnUserPoolIdentityProvider {
   constructor(

@@ -1,17 +1,15 @@
-import { SecretsManager } from "aws-sdk"
-import { secretName } from "./consts"
+import {
+  SecretsManagerClient,
+  GetSecretValueCommand,
+} from "@aws-sdk/client-secrets-manager";
+import { secretName } from "./consts";
 
-const secrets = new SecretsManager()
-
-export const getSecrets = () => {
-  return new Promise((resolve) => {
-    secrets.getSecretValue({ SecretId: secretName }, (err, data) => {
-      if (err) {
-        console.error(`Error fetching secret ${secretName}`, err)
-        throw err
-      }
-      const secrets = JSON.parse(data.SecretString || "{}")
-      resolve(secrets)
-    })
-  })
-}
+export const getSecrets = async () => {
+  const client = new SecretsManagerClient({});
+  const req = new GetSecretValueCommand({ SecretId: secretName });
+  const res = await client.send(req);
+  if (!res.SecretString) {
+    throw new Error(`Missing secretString in ${secretName}`);
+  }
+  return JSON.parse(res.SecretString);
+};
