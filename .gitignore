@@ -50,5 +50,4 @@ junit.xml
 .jsii
 tsconfig.json
 !/API.md
-!/.github/workflows/upgrade-main.yml
-/build/
+!/.github/workflows/upgrade-master.yml
