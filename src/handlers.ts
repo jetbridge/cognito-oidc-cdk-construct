@@ -1,10 +1,11 @@
-import { HttpApi } from "aws-cdk-lib/aws-apigatewayv2";
-import { LambdaProxyIntegration } from "aws-cdk-lib/aws-apigatewayv2-integrations";
-import { Construct } from "constructs";
+/* eslint-disable import/no-extraneous-dependencies */
+import { HttpApi } from "@aws-cdk/aws-apigatewayv2-alpha";
+import { HttpLambdaIntegration } from "@aws-cdk/aws-apigatewayv2-integrations-alpha";
 import {
-  NodejsFunctionProps,
   NodejsFunction,
-} from "../constructs/NodejsFunction";
+  NodejsFunctionProps,
+} from "aws-cdk-lib/aws-lambda-nodejs";
+import { Construct } from "constructs";
 import { lambdaConfs } from "./consts";
 import { SecretsOidc } from "./secrets";
 import {
@@ -30,14 +31,19 @@ export class Handlers extends Construct {
   constructor(
     scope: Construct,
     id: string,
-    { apiGateway, provider, secrets, cognitoRedirectUri }: HandlersProps
+    {
+      apiGateway,
+      provider,
+      secrets,
+      cognitoRedirectUri: cognitoRedirectUri_,
+    }: HandlersProps
   ) {
     super(scope, id);
 
     this.apiGateway = apiGateway;
     this.provider = provider;
     this.secrets = secrets;
-    this.cognitoRedirectUri = cognitoRedirectUri;
+    this.cognitoRedirectUri = cognitoRedirectUri_;
 
     this.createLambdaHandlers();
   }
@@ -64,7 +70,10 @@ export class Handlers extends Construct {
       });
       this.secrets.grantRead(handlerFunc);
       this.apiGateway.addRoutes({
-        integration: new LambdaProxyIntegration({ handler: handlerFunc }),
+        integration: new HttpLambdaIntegration(
+          `Integration${lambdaConfig.name}`,
+          handlerFunc
+        ),
         path: lambdaConfig.path,
       });
     });

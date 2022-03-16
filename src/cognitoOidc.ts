@@ -1,13 +1,13 @@
-import { Construct } from "constructs";
-import { HttpApi, HttpApiProps } from "@aws-cdk/aws-apigatewayv2-integrations-alpha";
-// import { HttpApi, HttpApiProps } from "aws-cdk-lib/aws-apigatewayv2";
-import { OidcProvider, ProviderConfig } from "./types";
-import { Handlers } from "./handlers";
-import { SecretsOidc } from "./secrets";
-import { Idp } from "./idp";
-import { capitalize } from "./util/char";
-import { IDP_CONF } from "./consts";
+/* eslint-disable import/no-extraneous-dependencies */
+import { HttpApi, HttpApiProps } from "@aws-cdk/aws-apigatewayv2-alpha";
 import { UserPoolClient } from "aws-cdk-lib/aws-cognito";
+import { Construct } from "constructs";
+import { IDP_CONF } from "./consts";
+import { Handlers } from "./handlers";
+import { Idp } from "./idp";
+import { SecretsOidc } from "./secrets";
+import { OidcProvider, ProviderConfig } from "./types";
+import { capitalize } from "./util/char";
 
 export interface CognitoOidcProps {
   apiGatewayProps?: HttpApiProps;
@@ -83,7 +83,9 @@ export class CognitoOidc extends Construct {
       return this.secrets.getSecretValue("githubClientId");
     } else if (this.providerType == "LINKEDIN") {
       return this.secrets.getSecretValue("linkedinClientId");
-    } else throw Error(`invalid provider ${this.providerType}`);
+    } else {
+      throw Error(`invalid provider ${this.providerType}`);
+    }
   }
 
   getClientSecret(): string {
@@ -91,7 +93,9 @@ export class CognitoOidc extends Construct {
       return this.secrets.getSecretValue("githubClientSecret");
     } else if (this.providerType == "LINKEDIN") {
       return this.secrets.getSecretValue("linkedinClientSecret");
-    } else throw Error(`invalid provider ${this.providerType}`);
+    } else {
+      throw Error(`invalid provider ${this.providerType}`);
+    }
   }
 
   createIdp() {
