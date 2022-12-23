@@ -127,7 +127,7 @@
     "@aws-cdk/aws-apigatewayv2-alpha": "^2.16.0-alpha.0",
     "@aws-cdk/aws-apigatewayv2-integrations-alpha": "^2.16.0-alpha.0",
     "@aws-sdk/client-secrets-manager": "^3.54.1",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "node-fetch": "^3.2.3"
   }
 }
